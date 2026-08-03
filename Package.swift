@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 5.10
 import PackageDescription
 
 // SPCPointHome 배포 매니페스트.
