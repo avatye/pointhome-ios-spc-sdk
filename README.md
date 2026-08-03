@@ -1,6 +1,6 @@
 # SPCPointHome iOS SDK
 
-현재 버전 **2.1.0**
+현재 버전 **2.1.1**
 
 ---
 
@@ -32,7 +32,7 @@ Add 후 `SPCPointHome` 라이브러리를 앱 타깃에 추가합니다.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.0")
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.1")
 ]
 ```
 
@@ -168,7 +168,7 @@ https://github.com/IGAWorksDev/ap-APSSPSDK-SPM
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.0"),
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.1"),
     .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-SPM", exact: "3.2.2")
 ]
 ```
@@ -258,12 +258,12 @@ Vungle · Pangle · Moloco · Mintegral · Google · Cauly · AdFit 은 내려�
 
 2.1.0 부터 어댑터 추가가 연동사 측 작업으로 변경되었습니다. 이전에는 SDK 가 함께 제공했습니다. 위 4번을 참고해 주세요.
 
-### 그 외 2.1.0 변경사항
+### 그 외 2.1.x 변경사항
 
 - `PointHomeAdLoader` 의 `logLevel` · `namConfiguration` 파라미터가 제거되었습니다. 두 파라미터 모두 기본값이 있어 전달하지 않으셨다면 변경할 사항이 없습니다. 로그 레벨은 `PointHome.setting(logLevel:)` 로 지정합니다
 - 광고 팝업의 닫기 버튼이 비활성화되었습니다
 
-> **2.1.0 은 SPM 으로만 제공합니다.** CocoaPods 배포는 지원하지 않습니다.
+> **2.1.x 는 SPM 으로만 제공합니다.** CocoaPods 배포는 지원하지 않습니다.
 
 ---
 
