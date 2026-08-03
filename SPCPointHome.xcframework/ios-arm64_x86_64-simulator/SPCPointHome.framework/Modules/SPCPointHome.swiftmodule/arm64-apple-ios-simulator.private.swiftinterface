@@ -1,0 +1,287 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.3.3 effective-5.10 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name SPCPointHome
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
+import AdCashFramework
+import AdSupport
+import AppTrackingTransparency
+import BuzzAdBenefitSDK
+import BuzzvilSDK
+import CommonCrypto
+import DeveloperToolsSupport
+import Foundation
+import Security
+import Swift
+import SwiftUI
+import SystemConfiguration
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_hasMissingDesignatedInitializers public class Reachability {
+  public class func isConnectedToNetwork() -> Swift.Bool
+  @objc deinit
+}
+extension Swift.String {
+  public func sha256() -> Swift.String
+}
+public protocol PointHomeWebViewDelegate : SPCPointHome.PHWebViewDelegate {
+}
+@_hasMissingDesignatedInitializers public class PointHome {
+  public static func setting(appId: Swift.String, appSecretKey: Swift.String, logLevel: SPCPointHome.LogLevel = .info)
+  public static func openService(rootVC: UIKit.UIViewController, userKey: Swift.String? = nil, serviceKey: Swift.String? = nil, delegate: (any SPCPointHome.PointHomeWebViewDelegate)? = nil, completion: @escaping (SPCPointHome.PointHomeOpen<Swift.String, SPCPointHome.PointHomeError>) -> Swift.Void)
+  public static func getFeed(userKey: Swift.String, param: SPCPointHome.PHFeedParamModel, completion: @escaping (SPCPointHome.PHNetworkResult<SPCPointHome.PointHomeFeedResponseModel, SPCPointHome.PointHomeError>) -> Swift.Void)
+  @objc deinit
+}
+public protocol PHAdLoaderDelegate : AnyObject {
+  func onBannerLoaded(_ apid: Swift.String, adView: UIKit.UIView, size: CoreFoundation.CGSize)
+  func onBannerFailed(_ apid: Swift.String, error: SPCPointHome.PointHomeError)
+  func onBannerClicked(_ apid: Swift.String)
+  func onBannerRemoved(_ apid: Swift.String)
+}
+@objc public class PointHomeAdLoader : ObjectiveC.NSObject {
+  weak public var delegate: (any SPCPointHome.PHAdLoaderDelegate)?
+  public init(rootVC: UIKit.UIViewController, placementId: Swift.String, width: CoreFoundation.CGFloat)
+  public func requestAd()
+  public func stopAd()
+  public func release()
+  @objc deinit
+}
+public enum PHNetworkResult<T, E> {
+  case success(T)
+  case failure(E)
+}
+public struct PHFeedParamModel : Swift.Codable {
+  public init(IDFA: Swift.String, targetFill: Swift.String? = nil, cursor: Swift.String? = nil, placementID: Swift.String, ifv: Swift.String? = nil, birthday: Swift.String? = nil, gender: Swift.String? = nil, carrier: Swift.String? = nil, device_name: Swift.String? = nil, latitude: Swift.String? = nil, longitude: Swift.String? = nil, user_agent: Swift.String? = nil)
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct PointHomeFeedResponseModel : Swift.Codable {
+  public let items: [SPCPointHome.FeedItemsModel]
+  public let cursor: Swift.String
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct FeedItemsModel : Swift.Codable {
+  public let id: Swift.Int
+  public let name: Swift.String
+  public let impression_url: [Swift.String]?
+  public let reward: Swift.Int
+  public let reward_condition: Swift.String
+  public let check_participation_url: Swift.String?
+  public let type: Swift.String
+  public let creative: SPCPointHome.FeedCreativeModel
+  public let payload: Swift.String?
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct FeedCreativeModel : Swift.Codable {
+  public let title: Swift.String?
+  public let description: Swift.String?
+  public let click_url: Swift.String?
+  public let call_to_action: Swift.String?
+  public let width: Swift.Int?
+  public let height: Swift.Int?
+  public let icon_url: Swift.String?
+  public let image_url: Swift.String?
+  public let is_deeplink: Swift.Bool?
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ErrorModel : Swift.Codable {
+  public var code: Swift.String?
+  public var status: Swift.Int?
+  public var message: Swift.String?
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct PointHomeError : Swift.Error {
+  public let code: Swift.Int
+  public let type: Swift.String
+  public let message: Swift.String
+}
+public enum PHFeedError {
+  case EXCEPTION
+  case NETWORK_ERROR
+  case UNAUTHORIZE_ERROR
+  case SERVER_ERROR
+  case INVALID_PARAMETER
+  case IN_MAINTENANCE
+  public static func == (a: SPCPointHome.PHFeedError, b: SPCPointHome.PHFeedError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum LogLevel : Swift.Int, Swift.CustomStringConvertible {
+  case debug
+  case info
+  case error
+  public var description: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class PointHomeLogger {
+  public static func debug(_ message: Swift.String, file: Swift.String = #file, line: Swift.Int = #line, function: Swift.String = #function)
+  public static func info(_ message: Swift.String, file: Swift.String = #file, line: Swift.Int = #line, function: Swift.String = #function)
+  public static func error(_ message: Swift.String, file: Swift.String = #file, line: Swift.Int = #line, function: Swift.String = #function)
+  @objc deinit
+}
+@objc @_Concurrency.MainActor @preconcurrency public class AvatyeWebSDKController : ObjectiveC.NSObject, WebKit.WKScriptMessageHandler {
+  @_Concurrency.MainActor @preconcurrency public init(rootWebView: WebKit.WKWebView!)
+  @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class PHWebViewController : UIKit.UIViewController {
+  @_Concurrency.MainActor @preconcurrency public var delegate: (any SPCPointHome.PHWebViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public func open(_ rootVC: UIKit.UIViewController, serviceKey: Swift.String, completion: @escaping (SPCPointHome.PointHomeOpen<Swift.String, SPCPointHome.PointHomeError>) -> Swift.Void)
+  @_Concurrency.MainActor @preconcurrency public func open(_ rootVC: UIKit.UIViewController, userKey: Swift.String, serviceKey: Swift.String, completion: @escaping (SPCPointHome.PointHomeOpen<Swift.String, SPCPointHome.PointHomeError>) -> Swift.Void)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
+  @objc deinit
+  @_Concurrency.MainActor @preconcurrency public func evaluateJS(event: Swift.String)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension SPCPointHome.PHWebViewController : SPCPointHome.PHWebViewDelegate {
+  @_Concurrency.MainActor @preconcurrency public func webEventListener(event: Swift.String)
+}
+public struct PHADSParamModel : Swift.Codable {
+  public init(placementID: Swift.String, appID: Swift.String? = nil, deviceADID: Swift.String? = nil)
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct PHADSResponseModel : Swift.Codable {
+  public let ads: [SPCPointHome.PHADSItemsModel]
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct PHADSItemsModel : Swift.Codable {
+  public let placementID: Swift.String?
+  public let advertiseID: Swift.String?
+  public let productID: Swift.String?
+  public let title: Swift.String?
+  public let imageUrl: Swift.String?
+  public let iconUrl: Swift.String?
+  public let reward: Swift.Int?
+  public let rewardFrequencyMinutes: Swift.Int?
+  public let landingUrl: Swift.String?
+  public let useInAppBrowser: Swift.Bool?
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum PHADSError {
+  case EXCEPTION
+  case NETWORK_ERROR
+  case UNAUTHORIZE_ERROR
+  case SERVER_ERROR
+  case INVALID_PARAMETER
+  case IN_MAINTENANCE
+  public static func == (a: SPCPointHome.PHADSError, b: SPCPointHome.PHADSError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PointHomeResult {
+  case success
+  case failure
+  public static func == (a: SPCPointHome.PointHomeResult, b: SPCPointHome.PointHomeResult) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PointHomeOpenType {
+  case success
+  case pathErr
+  case serverErr
+  case inMaintenance
+  case networkFail
+  case unRecognizedError
+  public static func == (a: SPCPointHome.PointHomeOpenType, b: SPCPointHome.PointHomeOpenType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PointHomeOpen<T, E> {
+  case success(T)
+  case failure(E)
+}
+public enum TokenError : Swift.Error {
+  case pathErr
+  case serverErr
+  case inMaintenance
+  case networkFail
+  case unRecognizedError
+  public static func == (a: SPCPointHome.TokenError, b: SPCPointHome.TokenError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum AvatyePointHomeError {
+  case EXCEPTION_UNKNOWN
+  case NETWORK_ERROR
+  case EXCEPTION_KNOWN
+  case INITIALIZE_ERROR
+  case EXPIRE_TOKEN
+  case INVALID_USERKEY
+  case SERVER_ERROR
+  case IN_MAINTENANCE
+  public static func == (a: SPCPointHome.AvatyePointHomeError, b: SPCPointHome.AvatyePointHomeError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PointHomeResultType<T> {
+  case success(T)
+  case pathErr
+  case serverErr
+  case inMaintenance
+  case networkFail
+  case unRecognizedError
+}
+public class PointHomeADS {
+  public init()
+  public func getADPlace(userKey: Swift.String, placementID: Swift.String, appID: Swift.String? = nil, deviceADID: Swift.String? = nil, completion: @escaping (SPCPointHome.PHNetworkResult<SPCPointHome.PHADSResponseModel, SPCPointHome.PointHomeError>) -> Swift.Void)
+  public func postADSImpression(userKey: Swift.String, placementID: Swift.String, advertiseID: Swift.String, deviceADID: Swift.String? = nil, deviceID: Swift.String? = nil, completion: @escaping (SPCPointHome.PHNetworkResult<Swift.Bool, SPCPointHome.PointHomeError>) -> Swift.Void)
+  public func postADSClick(userKey: Swift.String, placementID: Swift.String, advertiseID: Swift.String, deviceADID: Swift.String? = nil, deviceID: Swift.String? = nil, completion: @escaping (SPCPointHome.PHNetworkResult<Swift.Bool, SPCPointHome.PointHomeError>) -> Swift.Void)
+  @objc deinit
+}
+public class TokenUtil {
+  public init()
+  public func getToken(userKey: Swift.String) async throws -> Swift.Result<Swift.String, SPCPointHome.TokenError>
+  public func deleteToken()
+  @objc deinit
+}
+public protocol PHWebViewDelegate : AnyObject {
+  func webEventListener(event: Swift.String)
+}
+extension SPCPointHome.PHFeedError : Swift.Equatable {}
+extension SPCPointHome.PHFeedError : Swift.Hashable {}
+extension SPCPointHome.LogLevel : Swift.Equatable {}
+extension SPCPointHome.LogLevel : Swift.Hashable {}
+extension SPCPointHome.LogLevel : Swift.RawRepresentable {}
+extension SPCPointHome.AvatyeWebSDKController : Swift.Sendable {}
+extension SPCPointHome.PHADSError : Swift.Equatable {}
+extension SPCPointHome.PHADSError : Swift.Hashable {}
+extension SPCPointHome.PointHomeResult : Swift.Equatable {}
+extension SPCPointHome.PointHomeResult : Swift.Hashable {}
+extension SPCPointHome.PointHomeOpenType : Swift.Equatable {}
+extension SPCPointHome.PointHomeOpenType : Swift.Hashable {}
+extension SPCPointHome.TokenError : Swift.Equatable {}
+extension SPCPointHome.TokenError : Swift.Hashable {}
+extension SPCPointHome.AvatyePointHomeError : Swift.Equatable {}
+extension SPCPointHome.AvatyePointHomeError : Swift.Hashable {}
