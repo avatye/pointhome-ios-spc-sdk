@@ -74,15 +74,13 @@ SDK 는 광고 식별자(IDFA)가 필요할 때 `ATTrackingManager.requestTracki
 
 문구는 앱 정책에 맞게 작성한다. 심사에서 문구 적절성을 본다.
 
-### 불필요 — ATS 우회
-
-SDK 의 모든 엔드포인트가 **HTTPS** 다. `NSAppTransportSecurity` / `NSAllowsArbitraryLoads` 를 넣을 필요가 없다.
-
-> 아바티 테스트 앱의 `Info.plist` 에 `NSAllowsArbitraryLoads = true` 가 있으나 이는 사내 개발 서버 접속용이다. **그대로 복사하지 말 것.** 불필요한 ATS 우회는 심사에서 사유를 요구받는다.
-
 ### 미디에이션 어댑터를 추가하는 경우
 
-어댑터마다 요구하는 키가 다르다. 각 어댑터 문서를 따른다. 예를 들어 AppLovin 은 `AppLovinSdkKey`, NAM 은 `NAMSdkKey`, AdMob 은 `GADApplicationIdentifier` 를 요구한다.
+어댑터마다 요구하는 키가 다르다. 예를 들어 AppLovin 은 `AppLovinSdkKey`, NAM 은 `NAMSdkKey`, AdMob 은 `GADApplicationIdentifier` 를 요구한다. **`SKAdNetworkItems` 등록도 필요하다.**
+
+매체별 키와 SKAdNetworkId 는 아래 문서를 따른다.
+
+**[AdPopcorn SSP iOS 3.x.x 미디에이션 가이드](https://adpopcornssp.gitbook.io/ssp-sdk/undefined-1/ap/ap-ios/ios-3.x.x)**
 
 ---
 
@@ -172,6 +170,12 @@ final class MyViewController: UIViewController, PHAdLoaderDelegate {
 
 **SDK 는 광고 어댑터를 포함하지 않는다.** 필요한 매체만 직접 고른다. 추가하지 않은 매체는 런타임 탐색에서 제외되므로, 하나도 넣지 않아도 SDK 는 정상 동작한다.
 
+> ### 📖 미디에이션 공식 문서
+>
+> **[AdPopcorn SSP iOS 3.x.x 미디에이션 가이드](https://adpopcornssp.gitbook.io/ssp-sdk/undefined-1/ap/ap-ios/ios-3.x.x)**
+>
+> 지원 매체 목록, SPM 지원 현황, **매체별 상세 설정**, 네이티브 광고 미디에이션, **SKAdNetworkId 등록**을 다룬다. 아래는 이 SDK 에서 SPM 으로 붙이는 방법만 정리한 것이므로, 매체별 설정은 반드시 위 문서를 확인한다.
+
 어댑터는 `ap-APSSPSDK-SPM` 패키지에 product 단위로 들어 있다. **패키지를 추가한 뒤 원하는 product 만 앱 타깃에 링크**하면 된다.
 
 ```
@@ -221,6 +225,8 @@ dependencies: [
 | `APSSPMediationCauly` | Cauly |
 | `APSSPMediationAdFit` | 카카오 AdFit |
 | `APSSPMediationMezzo` · `APSSPMediationAdForus` | 그 외 |
+
+지원 매체와 광고 형식(배너/네이티브/전면/보상)별 대응 여부는 [공식 문서의 지원 중인 업체 목록](https://adpopcornssp.gitbook.io/ssp-sdk/undefined-1/ap/ap-ios/ios-3.x.x)에서 확인한다. 위 표는 SPM product 이름 대조용이다.
 
 ### 버전은 `3.2.2` 로 고정해야 한다
 
