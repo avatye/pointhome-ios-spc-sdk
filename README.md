@@ -1,6 +1,6 @@
 # SPCPointHome iOS SDK
 
-현재 버전 **2.1.1**
+현재 버전 **2.1.2**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ### Xcode
 
-**File → Add Package Dependencies** 에서 아래 URL 을 입력하고, Dependency Rule 을 **Up to Next Major Version `2.1.1`** 으로 지정합니다.
+**File → Add Package Dependencies** 에서 아래 URL 을 입력하고, Dependency Rule 을 **Up to Next Major Version `2.1.2`** 으로 지정합니다.
 
 ```
 https://github.com/avatye/pointhome-ios-spc-sdk.git
@@ -32,7 +32,7 @@ Add 후 `SPCPointHome` 라이브러리를 앱 타깃에 추가합니다.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.1")
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.2")
 ]
 ```
 
@@ -168,7 +168,7 @@ https://github.com/IGAWorksDev/ap-APSSPSDK-SPM
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.1"),
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.2"),
     .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-SPM", exact: "3.2.2")
 ]
 ```
