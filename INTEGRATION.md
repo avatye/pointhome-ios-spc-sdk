@@ -164,26 +164,84 @@ final class MyViewController: UIViewController, PHAdLoaderDelegate {
 
 ## 4. 미디에이션 어댑터 (선택)
 
-**SDK 는 광고 어댑터를 포함하지 않는다.** 필요한 매체만 직접 추가한다. 추가하지 않은 매체는 런타임 탐색에서 제외되므로, 하나도 넣지 않아도 SDK 는 정상 동작한다.
+**SDK 는 광고 어댑터를 포함하지 않는다.** 필요한 매체만 직접 고른다. 추가하지 않은 매체는 런타임 탐색에서 제외되므로, 하나도 넣지 않아도 SDK 는 정상 동작한다.
 
-패키지를 하나 더 추가하고 필요한 product 만 앱 타깃에 체크한다.
+어댑터는 `ap-APSSPSDK-SPM` 패키지에 product 단위로 들어 있다. **패키지를 추가한 뒤 원하는 product 만 앱 타깃에 링크**하면 된다.
 
 ```
 https://github.com/IGAWorksDev/ap-APSSPSDK-SPM
 ```
 
+### Xcode
+
+1. **File → Add Package Dependencies** 에 위 URL 입력
+2. Dependency Rule 을 **Exact Version `3.2.2`** 로 지정
+3. Add 후 나오는 product 목록에서 **필요한 `APSSPMediation*` 만 체크** (앱 타깃에 지정)
+
+이미 추가한 뒤 매체를 바꾸려면 앱 타깃의 **General → Frameworks, Libraries, and Embedded Content** 에서 추가·제거한다.
+
+### Package.swift 를 쓰는 경우
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.0"),
+    .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-SPM", exact: "3.2.2")
+]
+```
+
+```swift
+.target(
+    name: "YourApp",
+    dependencies: [
+        .product(name: "SPCPointHome", package: "pointhome-ios-spc-sdk"),
+        // 필요한 매체만
+        .product(name: "APSSPMediationNAM", package: "ap-APSSPSDK-SPM"),
+        .product(name: "APSSPMediationAppLovin", package: "ap-APSSPSDK-SPM")
+    ]
+)
+```
+
+### 선택 가능한 product
+
 | product | 매체 |
 |---|---|
 | `APSSPMediationNAM` | 네이버 |
-| `APSSPMediationAppLovin` | AppLovin |
+| `APSSPMediationAppLovin` · `APSSPMediationAppLovinMax` | AppLovin |
 | `APSSPMediationVungle` | Vungle |
 | `APSSPMediationPangle` | Pangle |
-| `APSSPMediationAdMob` | AdMob |
-| `APSSPMediationMoloco` · `APSSPMediationMintegral` · `APSSPMediationCauly` · `APSSPMediationAdFit` … | 그 외 |
+| `APSSPMediationAdMob` · `APSSPMediationGAM` · `APSSPMediationADOP` | Google |
+| `APSSPMediationMoloco` | Moloco |
+| `APSSPMediationMintegral` | Mintegral |
+| `APSSPMediationCauly` | Cauly |
+| `APSSPMediationAdFit` | 카카오 AdFit |
+| `APSSPMediationMezzo` · `APSSPMediationAdForus` | 그 외 |
 
-버전은 `AvatyeAdCash` 가 고정한 값(`3.2.2`)을 따르므로 별도로 지정하지 않는다.
+### 버전은 `3.2.2` 로 고정해야 한다
 
-> **네이버(NAM) 네이티브 렌더링은 SDK 가 자동 처리한다.** 어댑터만 추가하면 되고 앱에서 렌더러를 조립할 필요가 없다.
+`AvatyeAdCash` 가 APSSPSDK 를 `exact: "3.2.2"` 로 못박고 있다. 다른 버전을 지정하면 **의존성 해석이 실패**한다. `Exact Version 3.2.2` 로 두는 것이 안전하다.
+
+### 고르지 않은 매체는 앱에 포함되지 않는다
+
+SPM 은 의존성 해석 단계에서 그래프 전체의 바이너리를 내려받는다. 그래서 고르지 않은 매체의 SDK 도 **디스크에 내려오지만, 링크되지 않으므로 앱 바이너리에는 들어가지 않는다.** 앱 용량과는 무관하고 해석 시간·디스크만 쓴다(→ 6번 CI 캐시 참고).
+
+`APSSPMediationNAM` + `APSSPMediationAppLovin` 두 개만 고른 경우 실제로 링크되는 것은 다음과 같다.
+
+```
+SPCPointHome.framework          ← 이 SDK
+AdCashFramework.framework       ← 함께 제공
+APSSPSDK.framework
+BuzzvilSDK.framework
+BuzzAdBenefitSDK.framework
+AppLovinSDK.framework           ← APSSPMediationAppLovin
+GFPSDK.framework                ← APSSPMediationNAM
+NaverAdsServices.framework
+OMSDK_Navercorp.framework
+GFPSDK_*.bundle
+```
+
+Vungle · Pangle · Moloco · Mintegral · Google · Cauly · AdFit 은 내려오기만 하고 링크되지 않는다.
+
+> **네이버(NAM) 네이티브 렌더링은 SDK 가 자동 처리한다.** `APSSPMediationNAM` 만 추가하면 되고 앱에서 렌더러를 조립할 필요가 없다.
 
 ---
 
