@@ -13,6 +13,9 @@
 | iOS | 13.0 이상 |
 | Xcode | CocoaPods 는 제한 없음 / **SPM 은 16 이상** |
 
+> **연동사는 [INTEGRATION.md](INTEGRATION.md) 를 보세요.** Info.plist 설정, 미디에이션 어댑터 추가,
+> CocoaPods 에서 이전하는 절차, CI 캐시 설정까지 정리되어 있습니다. 아래는 요약입니다.
+
 ## Installation
 
 두 채널 모두 모듈 이름은 `SPCPointHome` 으로 같다. 채널을 바꿔도 코드는 그대로다.
