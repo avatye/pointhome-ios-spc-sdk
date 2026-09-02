@@ -20,8 +20,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        // podspec 의 `~> 4.1.0` 과 같은 의미. (4.1.0 이상, 5.0.0 미만)
-        .package(url: "https://github.com/avatye-developer/sdk_adcash_ios", from: "4.1.0")
+        // podspec 의 `~> 4.2.0` 과 같은 의미. (4.2.0 이상, 5.0.0 미만)
+        .package(url: "https://github.com/avatye-developer/sdk_adcash_ios", from: "4.2.0")
     ],
     targets: [
         .binaryTarget(

@@ -1,6 +1,6 @@
 # SPCPointHome iOS SDK
 
-현재 버전 **2.1.2**
+현재 버전 **2.2.0**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ### Xcode
 
-**File → Add Package Dependencies** 에서 아래 URL 을 입력하고, Dependency Rule 을 **Up to Next Major Version `2.1.2`** 으로 지정합니다.
+**File → Add Package Dependencies** 에서 아래 URL 을 입력하고, Dependency Rule 을 **Up to Next Major Version `2.2.0`** 으로 지정합니다.
 
 ```
 https://github.com/avatye/pointhome-ios-spc-sdk.git
@@ -32,7 +32,7 @@ Add 후 `SPCPointHome` 라이브러리를 앱 타깃에 추가합니다.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.2")
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.2.0")
 ]
 ```
 
@@ -150,26 +150,34 @@ final class MyViewController: UIViewController, PHAdLoaderDelegate {
 >
 > 지원 매체 목록, SPM 지원 현황, **매체별 상세 설정**, 네이티브 광고 미디에이션, **SKAdNetworkId 등록**을 다룹니다. 아래는 이 SDK 에서 SPM 으로 연동하는 방법만 정리한 것이므로, 매체별 설정은 위 문서를 확인해 주세요.
 
-어댑터는 `ap-APSSPSDK-SPM` 패키지에 product 단위로 제공됩니다. **패키지를 추가한 뒤 필요한 product 만 앱 타깃에 추가**하시면 됩니다.
+> ⚠️ **2.1.x 를 쓰고 계셨다면 어댑터 추가 방법이 바뀌었습니다.** 기존 `ap-APSSPSDK-SPM` 패키지를 제거하고 아래대로 다시 추가해 주세요. 자세한 절차는 **5. 2.1.x 에서 올리는 경우** 를 참고하세요.
+
+2.2.0 부터 어댑터는 **매체마다 저장소가 따로 있습니다.** 사용하는 매체의 패키지만 추가하시면 됩니다.
 
 ```
-https://github.com/IGAWorksDev/ap-APSSPSDK-SPM
+https://github.com/IGAWorksDev/ap-APSSPSDK-APSSPMediation<매체>Adapter-SPM
 ```
+
+`APSSPSDK` 코어는 이 SDK 가 함께 제공하므로 **따로 추가하지 않으셔도 됩니다.** 어댑터 패키지가 코어를 의존하고 있어 버전도 자동으로 맞춰집니다.
 
 ### Xcode
 
-1. **File → Add Package Dependencies** 에 위 URL 입력
-2. Dependency Rule 을 **Exact Version `3.2.2`** 로 지정
-3. Add 후 표시되는 product 목록에서 **필요한 `APSSPMediation*` 만 선택** (앱 타깃 지정)
+1. **File → Add Package Dependencies** 에 사용할 매체의 URL 입력 (아래 표)
+2. Dependency Rule 을 **Exact Version** 으로 두고 표의 버전을 입력
+3. Add 후 표시되는 `APSSPMediation<매체>` 라이브러리를 앱 타깃에 추가
 
-추가 후 매체를 변경하려면 앱 타깃의 **General → Frameworks, Libraries, and Embedded Content** 에서 추가·제거합니다.
+매체를 추가하거나 빼려면 이 과정을 매체 단위로 반복합니다.
 
 ### Package.swift 를 사용하는 경우
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.1.2"),
-    .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-SPM", exact: "3.2.2")
+    .package(url: "https://github.com/avatye/pointhome-ios-spc-sdk.git", from: "2.2.0"),
+    // 사용하는 매체만
+    .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-APSSPMediationNAMAdapter-SPM",
+             exact: "8240300.0.0"),
+    .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-APSSPMediationAppLovinAdapter-SPM",
+             exact: "13060400.0.0")
 ]
 ```
 
@@ -178,44 +186,62 @@ dependencies: [
     name: "YourApp",
     dependencies: [
         .product(name: "SPCPointHome", package: "pointhome-ios-spc-sdk"),
-        // 필요한 매체만
-        .product(name: "APSSPMediationNAM", package: "ap-APSSPSDK-SPM"),
-        .product(name: "APSSPMediationAppLovin", package: "ap-APSSPSDK-SPM")
+        .product(name: "APSSPMediationNAM",
+                 package: "ap-APSSPSDK-APSSPMediationNAMAdapter-SPM"),
+        .product(name: "APSSPMediationAppLovin",
+                 package: "ap-APSSPSDK-APSSPMediationAppLovinAdapter-SPM")
     ]
 )
 ```
 
-### APSSPSDK 버전은 `3.2.2` 로 지정합니다
+### 매체별 패키지
 
-`AvatyeAdCash` 가 APSSPSDK 를 `exact: "3.2.2"` 로 고정하고 있습니다. 다른 버전을 지정하면 **의존성 해석이 실패합니다.** Dependency Rule 은 **Exact Version `3.2.2`** 로 지정해 주세요.
+저장소 URL 은 `https://github.com/IGAWorksDev/` 뒤에 아래 이름을 붙이시면 됩니다.
 
-### 선택 가능한 product
+| 매체 | 저장소 이름 | 버전 | 함께 고정되는 매체 SDK |
+|---|---|---|---|
+| 네이버 (NAM) | `ap-APSSPSDK-APSSPMediationNAMAdapter-SPM` | `8240300.0.0` | nam-sdk-ios 8.24.3 |
+| AppLovin | `ap-APSSPSDK-APSSPMediationAppLovinAdapter-SPM` | `13060400.0.0` | AppLovin 13.6.4 |
+| AppLovin MAX | `ap-APSSPSDK-APSSPMediationAppLovinMaxAdapter-SPM` | `13060400.0.0` | AppLovin 13.6.4 |
+| Vungle | `ap-APSSPSDK-APSSPMediationVungleAdapter-SPM` | `7070700.0.0` | Vungle 7.7.7 |
+| Pangle | `ap-APSSPSDK-APSSPMediationPangleAdapter-SPM` | `8020100.0.0` | AdsGlobalPackage 8.2.1-release.0 |
+| Google (AdMob) | `ap-APSSPSDK-APSSPMediationAdMobAdapter-SPM` | `13090000.0.0` | GoogleMobileAds 13.9.0 |
+| Google (GAM) | `ap-APSSPSDK-APSSPMediationGAMAdapter-SPM` | `13090000.0.0` | GoogleMobileAds 13.9.0 |
+| ADOP | `ap-APSSPSDK-APSSPMediationADOPAdapter-SPM` | `13090000.0.0` | GoogleMobileAds 13.9.0 |
+| AdForus | `ap-APSSPSDK-APSSPMediationAdForusAdapter-SPM` | `13090000.0.0` | GoogleMobileAds 13.9.0 |
+| 카카오 AdFit | `ap-APSSPSDK-APSSPMediationAdFitAdapter-SPM` | `3212400.0.0` | adfit-spm 3.21.24 |
+| Mintegral | `ap-APSSPSDK-APSSPMediationMintegralAdapter-SPM` | `8010700.0.0` | Mintegral 8.1.7 |
+| Moloco | `ap-APSSPSDK-APSSPMediationMolocoAdapter-SPM` | `4100000.0.0` | moloco 4.10.0 |
+| Cauly | `ap-APSSPSDK-APSSPMediationCaulyAdapter-SPM` | `3012200.0.0` | CaulySPM 3.1.22 |
+| Mezzo | `ap-APSSPSDK-APSSPMediationMezzoAdapter-SPM` | `3000000.0.0` | (자체 포함) |
 
-| product | 매체 |
-|---|---|
-| `APSSPMediationNAM` | 네이버 |
-| `APSSPMediationAppLovin` · `APSSPMediationAppLovinMax` | AppLovin |
-| `APSSPMediationVungle` | Vungle |
-| `APSSPMediationPangle` | Pangle |
-| `APSSPMediationAdMob` · `APSSPMediationGAM` · `APSSPMediationADOP` | Google |
-| `APSSPMediationMoloco` | Moloco |
-| `APSSPMediationMintegral` | Mintegral |
-| `APSSPMediationCauly` | Cauly |
-| `APSSPMediationAdFit` | 카카오 AdFit |
-| `APSSPMediationMezzo` · `APSSPMediationAdForus` | 그 외 |
+> 위 값은 2026-09-02 기준 최신입니다. 각 저장소의 태그 목록에서 최신 버전을 확인하실 수 있습니다.
+> 지원 매체와 광고 형식(배너·네이티브·전면·보상)별 대응 여부는 [공식 문서의 지원 중인 업체 목록](https://adpopcornssp.gitbook.io/ssp-sdk/undefined-1/ap/ap-ios/ios-3.x.x)을 확인해 주세요.
 
-위 표는 SPM product 이름 확인용입니다. 지원 매체와 광고 형식(배너·네이티브·전면·보상)별 대응 여부는 [공식 문서의 지원 중인 업체 목록](https://adpopcornssp.gitbook.io/ssp-sdk/undefined-1/ap/ap-ios/ios-3.x.x)을 확인해 주세요.
+### ⚠️ 버전 번호가 일반적인 형식이 아닙니다
 
-### 선택하지 않은 매체는 앱에 포함되지 않습니다
+어댑터의 버전 번호는 **그 어댑터가 대응하는 매체 SDK 버전을 인코딩한 값**입니다. `8240300.0.0` 은 NAM SDK **8.24.3** 을 뜻합니다 (`8` · `24` · `03` + 어댑터 리비전 `00`).
 
-SPM 은 의존성 해석 단계에서 그래프 전체의 바이너리를 내려받습니다. 따라서 선택하지 않은 매체의 SDK 도 **디스크에는 내려오지만, 링크되지 않으므로 앱 바이너리에는 포함되지 않습니다.** 앱 용량과는 무관하며 해석 시간과 디스크만 사용합니다.
+앞자리 전체가 semver 의 major 로 해석되기 때문에 **`Up to Next Major` 로 지정해도 사실상 한 버전만 잡힙니다.** 매체 SDK 나 어댑터 리비전이 올라가면 이 값을 직접 바꿔주셔야 합니다. 혼선을 줄이려면 **Exact Version** 으로 지정하시는 편이 명확합니다.
 
-`APSSPMediationNAM` 과 `APSSPMediationAppLovin` 두 개만 선택한 경우 링크되는 프레임워크는 다음과 같습니다.
+각 어댑터는 자신이 대응하는 매체 SDK 를 **고정(exact)** 합니다. 같은 매체 SDK 를 앱에서 직접 사용 중이시라면 위 표의 버전과 맞춰 주세요.
+
+### SPM 으로 제공되지 않는 매체
+
+**UnityAds · FAN(Meta) · InMobi · Fyber · Maio 는 SPM 어댑터가 없습니다.** CocoaPods 에만 있습니다.
+
+어댑터가 없으면 빌드가 실패하는 것이 아니라 **해당 지면의 워터폴에서 그 매체가 제외**됩니다. 즉 오류 없이 노출 기회만 줄어들 수 있으니, 사용하실 매체가 위 표에 있는지 먼저 확인해 주세요.
+
+### 선택하지 않은 매체는 내려오지도 않습니다
+
+2.1.x 까지는 어댑터가 패키지 하나에 모여 있어, 한 매체만 쓰더라도 **모든 매체의 SDK 를 내려받고 버전 제약도 전부 적용**받았습니다. 2.2.0 부터는 추가한 패키지의 것만 해석됩니다. 해석 시간과 디스크 사용량이 크게 줄고, 사용하지 않는 매체 때문에 앱의 광고 SDK 버전이 묶이는 일도 없습니다.
+
+`APSSPMediationNAM` 과 `APSSPMediationAppLovin` 두 개만 추가한 경우 링크되는 프레임워크는 다음과 같습니다.
 
 ```
 SPCPointHome.framework          ← 이 SDK
 AdCashFramework.framework       ← 함께 제공
-APSSPSDK.framework
+APSSPSDK.framework              ← 함께 제공
 BuzzvilSDK.framework
 BuzzAdBenefitSDK.framework
 AppLovinSDK.framework           ← APSSPMediationAppLovin
@@ -225,13 +251,49 @@ OMSDK_Navercorp.framework
 GFPSDK_*.bundle
 ```
 
-Vungle · Pangle · Moloco · Mintegral · Google · Cauly · AdFit 은 내려오기만 하고 링크되지 않습니다.
-
 > **네이버(NAM) 네이티브 렌더링은 SDK 가 자동 처리합니다.** `APSSPMediationNAM` 만 추가하시면 되고, 앱에서 렌더러를 구성하실 필요가 없습니다.
 
 ---
 
-## 5. CocoaPods 에서 이전
+## 5. 2.1.x 에서 올리는 경우
+
+**앱 코드는 변경하실 것이 없습니다.** API 가 동일합니다. 어댑터를 사용하지 않으신다면 패키지 버전만 `2.2.0` 으로 올리시면 끝입니다.
+
+어댑터를 사용 중이시라면 두 가지를 변경해 주세요.
+
+### ① 기존 APSSP 패키지 제거
+
+```diff
+- .package(url: "https://github.com/IGAWorksDev/ap-APSSPSDK-SPM", exact: "3.2.2")
+```
+
+```diff
+  .product(name: "SPCPointHome", package: "pointhome-ios-spc-sdk"),
+- .product(name: "APSSPMediationNAM", package: "ap-APSSPSDK-SPM"),
+- .product(name: "APSSPMediationAppLovin", package: "ap-APSSPSDK-SPM")
+```
+
+Xcode 를 쓰신다면 **Package Dependencies 에서 `ap-APSSPSDK-SPM` 항목을 제거**합니다. 코어는 이제 SDK 가 함께 제공하므로 직접 추가하실 필요가 없습니다.
+
+### ② 사용하는 매체의 어댑터 패키지를 각각 추가
+
+위 **4. 미디에이션 어댑터** 를 참고해 주세요.
+
+### 함께 개선된 것
+
+2.1.x 까지는 SPM 으로 연동하시면 **미디에이션을 쓰지 않으셔도** 아래 매체 SDK 의 버전이 앱에 강제됐습니다.
+
+```
+GoogleMobileAds >= 13.5.0 · AppLovin >= 13.6.3 · Vungle >= 7.7.3 · Mintegral >= 8.1.1
+NAM >= 8.22.1 · AdFit >= 3.21.24 · Cauly >= 3.1.22 · Moloco >= 4.5.1
+AdsGlobalPackage(Pangle) == 8.1.0-release.9
+```
+
+특히 Pangle 은 단일 버전 고정이라 우회할 방법이 없었고, GoogleMobileAds 12.x 를 쓰시는 앱은 SPM 연동 자체가 불가능했습니다. **2.2.0 부터는 실제로 추가하신 어댑터의 제약만 적용됩니다.** 어댑터를 추가하지 않으시면 강제되는 버전이 하나도 없습니다.
+
+---
+
+## 6. CocoaPods 에서 이전
 
 기존 `pod 'PointHome'` 2.0.x 를 사용하고 계셨다면 세 가지를 변경해 주세요.
 
@@ -263,7 +325,7 @@ Vungle · Pangle · Moloco · Mintegral · Google · Cauly · AdFit 은 내려�
 - `PointHomeAdLoader` 의 `logLevel` · `namConfiguration` 파라미터가 제거되었습니다. 두 파라미터 모두 기본값이 있어 전달하지 않으셨다면 변경할 사항이 없습니다. 로그 레벨은 `PointHome.setting(logLevel:)` 로 지정합니다
 - 광고 팝업의 닫기 버튼이 비활성화되었습니다
 
-> **2.1.x 는 SPM 으로만 제공합니다.** CocoaPods 배포는 지원하지 않습니다.
+> **2.1.0 이후로는 SPM 으로만 제공합니다.** CocoaPods 배포는 지원하지 않습니다.
 
 ---
 
