@@ -10082,7 +10082,7 @@
       "kind": "StringLiteral",
       "offset": 331,
       "length": 7,
-      "value": "\"2.1.2\""
+      "value": "\"2.2.0\""
     },
     {
       "filePath": "\/Users\/jun\/XcodeProject\/PointHomeSdk\/secta9ine-ios-sdk\/SPCPointHome\/Classes\/AvatyePointHome\/AvatyePH.swift",
