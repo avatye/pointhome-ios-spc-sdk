@@ -20,8 +20,9 @@ let package = Package(
         )
     ],
     dependencies: [
-        // podspec 의 `~> 4.2.0` 과 같은 의미. (4.2.0 이상, 5.0.0 미만)
-        .package(url: "https://github.com/avatye-developer/sdk_adcash_ios", from: "4.2.0")
+        // 소스 podspec 의 `~> 4.2.3` 과 하한을 맞춘다. (빌드 스크립트가 두 값의 일치를 검사한다)
+        // 상한은 채널마다 다르다 — CocoaPods `~> 4.2.3` 은 4.3.0 미만, SPM `from:` 은 5.0.0 미만.
+        .package(url: "https://github.com/avatye-developer/sdk_adcash_ios", from: "4.2.3")
     ],
     targets: [
         .binaryTarget(
